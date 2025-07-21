@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Easy Notebook</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #111; 
+            color: #ffeb3b; 
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 3px #000;
+        }
+        form {
+            margin-bottom: 30px;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ffeb3b66;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px 0;
+            border: none;
+            border-radius: 6px;
+            background-color: #333;
+            color: #ffeb3b;
+            font-size: 1rem;
+        }
+        input[type="text"]::placeholder,
+        textarea::placeholder {
+            color: #ccc;
+        }
+        button {
+            background-color: #ffeb3b;
+            color: #111;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.25s ease;
+        }
+        button:hover {
+            background-color: #e6d600;
+        }
+        .note {
+            background-color: #222;
+            border: 2px solid #ffeb3b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: 0 0 10px #ffeb3b66;
+        }
+        .note h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.3rem;
+            color: #fff;
+        }
+        .note p {
+            white-space: pre-wrap;
+            font-size: 1rem;
+            color: #ffeb3b;
+        }
+        .delete-form {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+        .delete-form button {
+            background-color: transparent;
+            color: #ff3333;
+            font-weight: bold;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: color 0.3s ease;
+        }
+        .delete-form button:hover {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Notebook</h1>
+    <form method="post" action="{{ url_for('index') }}">
+        <input type="text" name="title" placeholder="Title" required autofocus>
+        <textarea name="content" placeholder="Write your note here..." required rows="5"></textarea>
+        <button type="submit">Add Note</button>
+    </form>
+
+    {% if notes %}
+        {% for note in notes %}
+            <div class="note">
+                <h3>{{ note['title'] }}</h3>
+                <p>{{ note['content'] }}</p>
+                <form class="delete-form" method="post" action="{{ url_for('delete', note_id=note['id']) }}">
+                    <button type="submit" title="Delete this note">&times;</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No notes yet. Add your first note!</p>
+    {% endif %}
+</body>
+</html>
